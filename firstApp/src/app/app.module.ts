@@ -3,22 +3,24 @@ import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { StudentEditorComponent } from './components/student-editor/student-editor.component';
-import { TableStudentsComponent } from './components/table-students/table-students.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { DialogEditWrapperComponent } from './components/dialog-edit-wrapper/dialog-edit-wrapper.component';
 import { HttpClientModule } from '@angular/common/http';
-import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
-import { InMemoryDataComponent } from './service/in-memory-data/in-memory-data.component';
+import { MatTableModule } from '@angular/material/table';
+import { MatSortModule } from '@angular/material/sort';
+import { TableSortingExample } from './components/sort-header/sort-header.component';
+import { AngularPaginatorModule } from 'angular-paginator';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatPaginatorModule } from '@angular/material/paginator';
+
 
 @NgModule({
   declarations: [
     AppComponent,
-    StudentEditorComponent,
-    TableStudentsComponent,
-    DialogEditWrapperComponent
+    DialogEditWrapperComponent,
+    TableSortingExample,
   ],
   imports: [
     BrowserModule,
@@ -29,10 +31,13 @@ import { InMemoryDataComponent } from './service/in-memory-data/in-memory-data.c
     MatFormFieldModule,
     MatInputModule,
     HttpClientModule,
-    HttpClientInMemoryWebApiModule.forRoot(
-      InMemoryDataComponent, { dataEncapsulation: false }
-    )
-
+    // HttpClientInMemoryWebApiModule.forRoot(
+    //   InMemoryDataComponent, { dataEncapsulation: false }),
+    MatTableModule,
+    MatSortModule,
+    AngularPaginatorModule,
+    BrowserAnimationsModule,
+    MatPaginatorModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,0 +1,67 @@
+table {
+  width: 100%;
+}
+
+th.mat-sort-header-sorted {
+  color: black;
+}
+
+a.myButton{
+  background:#eee;
+  color:#088;
+  text-decoration:none;
+  display:block;
+  border: 1px solid #bbb;
+  border-radius: 3px;
+  width:90px;
+  margin: 15px 10px;
+  text-align:center;
+  cursor: pointer;
+  padding:10px 10px;
+  transition:all 0.3s;
+  }
+a.myButton:hover{
+  box-shadow:0px -5px 0 #088 inset;
+}
+
+.search-input {
+  padding: 16px 15px;
+  width: 100%;
+  display: block;
+  outline: none;
+  border: 1px solid #bbb;
+  border-radius: 3px;
+  transition: 0.3s border-color ease, 0.3s box-shadow ease;
+  background-color: #ffffff;
+  box-sizing: border-box;
+}
+
+.panel {
+  background: #fff;
+  border-radius: 5px;
+  box-shadow: 0 7px 20px 0 rgb(0 0 0 / 7%);
+  padding: 40px;
+  overflow: hidden;
+}
+
+.about {
+  display:inline-block;
+ }
+
+ .container {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  padding: 20px;
+}
+
+#con1{
+  display: inline-flex;
+}
+
+#con2{
+  display: inline-flex;
+  position: absolute;
+  right: 5%;
+}
+

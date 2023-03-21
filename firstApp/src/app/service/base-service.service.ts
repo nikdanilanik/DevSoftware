@@ -9,13 +9,7 @@ import { Observable } from 'rxjs';
 
 export class BaseServiceService {
 
-  student: Student[] = [
-    {id: 0, name: 'Имя', surname: 'Фимилия'},
-    {id: 1, name: 'Имя 1', surname: 'Фимилия 1'},
-    {id: 2, name: 'Имя 2', surname: 'Фимилия 2'}
-  ];
-
-  private studentsUrl = 'api/students';
+  private studentsUrl = 'api/base/students';
 
   constructor(
     private http: HttpClient) {}
