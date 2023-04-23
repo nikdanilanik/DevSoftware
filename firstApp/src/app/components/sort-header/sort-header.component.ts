@@ -1,7 +1,8 @@
-import { DialogEditWrapperComponent } from './../dialog-edit-wrapper/dialog-edit-wrapper.component';
+import { Router } from '@angular/router';
+import { DialogEditWrapperComponent, DialogDeleteStudent, DialogChangeStudent } from './../dialog-edit-wrapper/dialog-edit-wrapper.component';
 import { MatDialog } from '@angular/material/dialog';
 import { BaseServiceService } from './../../service/base-service.service';
-import { Student } from './../../models/students';
+import { Student, DeleteStudent } from './../../models/students';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { AfterViewInit, Component, ViewChild} from '@angular/core';
@@ -14,8 +15,10 @@ import { MatTableDataSource } from '@angular/material/table';
   styleUrls: ['./sort-header.component.css']
 })
 export class TableSortingExample implements AfterViewInit {
-  displayedColumns: string[] = ['id', 'fio', 'group', 'phoneNumber'];
+  displayedColumns: string[] = ['id', 'fio', 'group', 'phoneNumber', 'button'];
   dataSource: MatTableDataSource<Student>;
+  studentResult: Student;
+
 
   constructor(private _liveAnnouncer: LiveAnnouncer,
     private baseServiceService: BaseServiceService,
@@ -64,8 +67,42 @@ export class TableSortingExample implements AfterViewInit {
       });
       dialogAddingNewStudent.afterClosed().subscribe((result: Student) => {
         if(result != null) {
-          console.log("adding new student: " + result.fio);
-          this.baseServiceService.addNewStudent(result).subscribe(k=>
+          if(result.fio != "" && result.group != "" && result.phoneNumber != "" && result.fio != null) {
+            console.log("adding new student: " + result.fio);
+            this.baseServiceService.addNewStudent(result).subscribe(k=>
+              this.baseServiceService.getAllStudents().subscribe(data => this.dataSource.data = data) );
+          }
+        }
+      });
+  }
+
+  removeStudent(idStudent: number) {
+    const dialogAddingNewStudent =
+      this.dialog.open(DialogDeleteStudent, {
+        width: 'auto',
+        data: null,
+      });
+      dialogAddingNewStudent.afterClosed().subscribe((result: DeleteStudent) => {
+        if (result == undefined) { console.log("Cansel delete");}
+        else if (idStudent != null) {
+          this.baseServiceService.removeStudentById(idStudent).subscribe(k=>
+            this.baseServiceService.getAllStudents().subscribe(data => this.dataSource.data = data) );
+        }
+      });
+  }
+
+  changeStudent(student:Student): void {
+    const dialogChangeStudentId =
+      this.dialog.open(DialogChangeStudent, {
+        width: '400px',
+        data: student,
+      });
+      dialogChangeStudentId.afterClosed().subscribe((result: Student) => {
+        console.log(student);
+        console.log(result);
+        if(student.fio == result.fio && student.phoneNumber == result.phoneNumber && student.group == result.group) {console.log("Error change")}
+        else {
+          this.baseServiceService.ChangeStudent(result).subscribe(k=>
             this.baseServiceService.getAllStudents().subscribe(data => this.dataSource.data = data) );
         }
       });

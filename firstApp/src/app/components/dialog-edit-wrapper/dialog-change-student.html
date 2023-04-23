@@ -1,9 +1,9 @@
-<h1 mat-dialog-title>Add student</h1>
+<h1 mat-dialog-title>Change student</h1>
 <div mat-dialog-content style="display: inline; padding: 0px; margin: auto;">
 
   <mat-form-field class="full-width-input">
     <input matInput type="text" placeholder="Fio of student"
-      [(ngModel)]="editingStudent.fio" required>
+      [(ngModel)]="editingStudent.fio">
   </mat-form-field>
   <mat-form-field class="full-width-input">
     <input matInput type="text" placeholder="Group of student"
@@ -17,5 +17,6 @@
 <div mat-dialog-actions>
   <button mat-raised-button (click)="onNoClick()">Cancel</button>
   <button mat-raised-button href="" color="primary"
-    [mat-dialog-close]="editingStudent">Add</button>
+    [mat-dialog-close]="editingStudent">Change</button>
 </div>
+

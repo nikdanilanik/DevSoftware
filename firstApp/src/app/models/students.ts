@@ -11,3 +11,11 @@ export class Student {
   group: string;
   phoneNumber: string;
 }
+
+export class DeleteStudent {
+  constructor() {
+    this.id = null;
+  }
+
+  id: number | null;
+}
