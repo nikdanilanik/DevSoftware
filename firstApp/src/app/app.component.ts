@@ -8,8 +8,6 @@ import { Router } from '@angular/router';
 })
 export class AppComponent implements OnInit {
   title = 'DedaRick';
-  constructor(private router: Router) {
-    console.log('router-active');
-  }
+  constructor(private router: Router) {  }
   ngOnInit(): void { }
 }

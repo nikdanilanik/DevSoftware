@@ -1,16 +1,92 @@
+import { UrlPathUtil } from 'src/app/utils/url-path-util';
+import { Router } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
+import { catchError, map, Observable, throwError } from 'rxjs';
 import { User } from './../models/user';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { APP_BASE_HREF } from '@angular/common';
+import { UsersUtil } from '../utils/users-util';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthServiceService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,
+    private cookieService: CookieService,
+    private router: Router) { }
 
-  login(login:string, password:string) {
-    console.log('login');
-    return this.http.post<User>('api/login', {login, password});
+  auth(loginAndPass: String) {
+    this.login(loginAndPass).subscribe(data => {
+      if (localStorage.getItem(UsersUtil.CURRENT_USER) != null) { this.router.navigateByUrl(UrlPathUtil.TABLE_STUDENT);}
+    });
+    // this.fakelogin().subscribe();
+    //  .subscribe(
+    //    res => {
+    //     this.dataProcessing(res);
+    //    },
+    //    )
+  }
+
+  // dataProcessing(data: any) {
+  //   localStorage.setItem("curentUser", data);
+
+  // }
+
+  login(loginAndPass: String): Observable<unknown> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+        'Authorization': 'Basic ' + loginAndPass,
+      })
+    };
+
+    return this.http.post<any>('api/login', null, httpOptions).pipe(
+      map(data => {
+        let user: User = new User();
+        // user.id = data.principal.id;
+        user.login = data.principal.username;
+        user.enabled = data.principal.enabled;
+        user.role = data.principal.authorities[0].authority;
+        // for (let i = 0; i < data.principal.authorities.length; i++ )
+        // {
+        //   user.roles[i] = data.principal.authorities[i].authority;
+        // }
+
+        localStorage.setItem(UsersUtil.CURRENT_USER, data);
+        return JSON.stringify(data);
+      }),
+      catchError((error: HttpErrorResponse) => {
+        if(error.status === 401) {
+          localStorage.removeItem(UsersUtil.CURRENT_USER);
+          this.router.navigateByUrl(UrlPathUtil.LOGIN);
+          alert("Ошибка входа. Проверьте логин и пароль");
+        }
+        return throwError(() => error);
+      }),
+
+      );
+  }
+
+  logoutLogics() {
+    return this.logout().subscribe(data => {
+      if (data.principal.username != null && data.principal.username != "") {
+        localStorage.removeItem(UsersUtil.CURRENT_USER);
+      }
+    });
+  }
+
+  logout() : Observable<any> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json'
+      })
+    };
+    return this.http.post<any>('api/logout', null, httpOptions).pipe(
+      map(data => {
+        return data;
+      })
+    );
   }
 }

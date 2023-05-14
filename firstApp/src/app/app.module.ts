@@ -1,4 +1,4 @@
-import { AuthServiceService } from './service/auth-service.service';
+import { CookieService } from 'ngx-cookie-service';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found-component';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -18,6 +18,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { AuthorizationComponent } from './components/authorization/authorization.component';
 import { HomePageComponent } from './components/home-page/home-page.component';
+import { StudentTableComponent } from './components/users-table/student-table/student-table.component';
+import { AdminTableComponent } from './components/users-table/admin-table/admin-table.component';
+import { TeacherTableComponent } from './components/users-table/teacher-table/teacher-table.component';
+import { JWT_OPTIONS, JwtHelperService } from '@auth0/angular-jwt';
 
 
 @NgModule({
@@ -28,6 +32,9 @@ import { HomePageComponent } from './components/home-page/home-page.component';
     AuthorizationComponent,
     PageNotFoundComponent,
     HomePageComponent,
+    StudentTableComponent,
+    AdminTableComponent,
+    TeacherTableComponent,
   ],
   imports: [
     BrowserModule,
@@ -45,7 +52,11 @@ import { HomePageComponent } from './components/home-page/home-page.component';
     BrowserAnimationsModule,
     MatPaginatorModule,
   ],
-  providers: [AuthServiceService],
+  providers: [
+    { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
+        [JwtHelperService],
+        [CookieService],
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

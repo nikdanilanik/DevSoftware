@@ -1,3 +1,4 @@
+import { UrlPathUtil } from 'src/app/utils/url-path-util';
 import { Router } from '@angular/router';
 import { Component } from '@angular/core';
 
@@ -10,6 +11,6 @@ export class HomePageComponent {
   constructor(private router: Router) {
   }
   authClick() {
-    this.router.navigateByUrl('/auth');
+    this.router.navigateByUrl(UrlPathUtil.LOGIN);
   }
 }

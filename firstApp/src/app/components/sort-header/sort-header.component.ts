@@ -5,7 +5,7 @@ import { BaseServiceService } from './../../service/base-service.service';
 import { Student, DeleteStudent } from './../../models/students';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
-import { AfterViewInit, Component, ViewChild} from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 
@@ -17,17 +17,25 @@ import { MatTableDataSource } from '@angular/material/table';
 export class TableSortingExample implements AfterViewInit {
   displayedColumns: string[] = ['id', 'fio', 'group', 'phoneNumber', 'button'];
   dataSource: MatTableDataSource<Student>;
-  studentResult: Student;
+
+  @Input() students: Student[];
+  @Output() onChange = new EventEmitter();
 
 
   constructor(private _liveAnnouncer: LiveAnnouncer,
     private baseServiceService: BaseServiceService,
     public dialog: MatDialog) {
-      this.baseServiceService.getAllStudents().subscribe((students:Student[]) => {
-        this.dataSource = new MatTableDataSource<Student>(students);
-        this.dataSource.sort = this.sort;
-        this.dataSource.paginator = this.paginator;
-      });
+      // this.baseServiceService.getAllStudents().subscribe((students:Student[]) => {
+      //   this.dataSource = new MatTableDataSource<Student>(students);
+      //   this.dataSource.sort = this.sort;
+      //   this.dataSource.paginator = this.paginator;
+      // });
+      this.dataSource = new MatTableDataSource<Student>(this.students);
+      this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
+
+      console.log("Конструктор sort-header");
+      console.log(this.students);
     }
 
   pgIndex= 2;
@@ -38,7 +46,10 @@ export class TableSortingExample implements AfterViewInit {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  ngAfterViewInit() {}
+  ngAfterViewInit() {
+    this.onChange.emit("hello");
+    console.log("ngAfterViewInit sort-header");
+  }
 
   announceSortChange(sortState: Sort) {
     if (sortState.direction) {
@@ -55,8 +66,8 @@ export class TableSortingExample implements AfterViewInit {
   }
 
   onChangePage(pe:PageEvent) {
-    console.log(pe.pageIndex);
-    console.log(pe.pageSize);
+    // console.log(pe.pageIndex);
+    // console.log(pe.pageSize);
   }
 
   addNewStudent(): void {
