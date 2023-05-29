@@ -26,7 +26,7 @@ export class BaseServiceService {
         if (sort) {
           params = params.set("sort", sort);
         }
-        if(filter) {
+        if (filter) {
           params = params.set("filter", filter);
         }
 

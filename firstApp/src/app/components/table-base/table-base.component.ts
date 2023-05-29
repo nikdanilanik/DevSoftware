@@ -24,7 +24,7 @@ import { Page } from 'src/app/models/page';
 export class TableMainExample implements AfterViewInit {
   displayedColumns: string[] = ['id', 'fio', 'group', 'phoneNumber', 'button'];
   dataSource: MatTableDataSource<Student>;
-  isLoading:boolean;
+  filterData:string;
 
   // @Input() students: Student[];
   // @Output() onChange = new EventEmitter();
@@ -56,12 +56,11 @@ export class TableMainExample implements AfterViewInit {
       this.totalElementsCount = studentsPage.totalElements;
       this.sort.sort({ id: 'id', start: 'asc', disableClear: false });
       this.dataSource.sort = this.sort;
-      console.log(studentsPage);
     });
   }
 
-  getDataForPage(page: number, size: number, sort: string ) {
-    this.baseServiceService.getAllStudents(page, size, sort).subscribe((studentsPage: Page<Student>) => {
+  getDataForPage(page: number, size: number, sort: string, filter?: string ) {
+    this.baseServiceService.getAllStudents(page, size, sort, filter).subscribe((studentsPage: Page<Student>) => {
       this.dataSource = new MatTableDataSource<Student>(studentsPage.content);
       this.totalElementsCount = studentsPage.totalElements;
     });
@@ -69,14 +68,14 @@ export class TableMainExample implements AfterViewInit {
 
   onChangePage(pe:PageEvent) {
     const sortCriterion = `${this.sort.active},${this.sort.direction}`;
-    this.getDataForPage(pe.pageIndex, pe.pageSize, sortCriterion);
+    this.getDataForPage(pe.pageIndex, pe.pageSize, sortCriterion, this.filterData);
   }
 
   announceSortChange(sortState: Sort) {
     const thisPageIndex = this.paginator.pageIndex;
     const thisPageSize = this.paginator.pageSize;
     const sortCriterion = `${this.sort.active},${this.sort.direction}`;
-    this.getDataForPage(thisPageIndex, thisPageSize, sortCriterion);
+    this.getDataForPage(thisPageIndex, thisPageSize, sortCriterion, this.filterData);
   }
 
   applyFilter(filterValue: string) {
@@ -84,20 +83,14 @@ export class TableMainExample implements AfterViewInit {
     const thisPageIndex = this.paginator.pageIndex;
     const thisPageSize = this.paginator.pageSize;
     const sortCriterion = `${this.sort.active},${this.sort.direction}`;
+    this.filterData = filterValue;
 
     if (filterValue === '' && thisPageIndex !== 0) {
       this.paginator.pageIndex = 0;
       this.getDataForPage(thisPageIndex, thisPageSize, sortCriterion);
       return;
     }
-
-    this.isLoading = true;
-  this.baseServiceService.getAllStudents(thisPageIndex, thisPageSize, sortCriterion, filterValue)
-    .subscribe(data => {
-      this.dataSource = new MatTableDataSource(data.content);
-      this.totalElementsCount = data.totalElements;
-      this.isLoading = false;
-    });
+    this.getDataForPage(thisPageIndex, thisPageSize, sortCriterion, filterValue);
   }
 
   addNewStudent(): void {
