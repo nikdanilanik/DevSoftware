@@ -1,4 +1,4 @@
-@import url('/src/app/components/authorization/authorization.component.css');
+/* @import url('/src/app/components/authorization/authorization.component.css');
 @import url('/src/app/components/home-page/home-page.component.css');
 
 .section2 {
@@ -16,4 +16,6 @@
 }
 .tabButton {
   margin: 15px 5px;
-}
+} */
+
+@import url('/src/app/components/users-table/admin-table/admin-table.component.css');

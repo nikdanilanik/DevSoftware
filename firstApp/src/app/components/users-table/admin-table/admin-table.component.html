@@ -1,1 +1,97 @@
-<p>admin-table works!</p>
+<div class="section2">
+  <div class="container" style="max-width: 90%;">
+    <div class="tabs">
+      <div class="tabs__content">
+        <div class="tabs__content__tab active">
+          <div class="row">
+            <div class="col-12">
+              <div class="container-login100-form-btn" style="padding: 5px 0px;justify-content: space-between;">
+                <button class="login100-form-btn" (click)="homeClick()">
+                  Вернуться назад
+                </button>
+                <button class="login100-form-btn" (click)="logOut()">
+                  Выйти
+                </button>
+              </div>
+
+
+              <div>
+                <div class="panel">
+                  <div class="example-header">
+                      <input class="search-input" matInput (keyup)="applyFilter($any($event.target).value)" placeholder="Введите в поиск нужную информацию">
+                  </div>
+
+                  <table mat-table [dataSource]="dataSource" matSort (matSortChange)="announceSortChange($event)"
+                        class="mat-elevation-z8">
+
+                    <!-- id Column -->
+                    <ng-container matColumnDef="id">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear sortActionDescription="Sort by id">
+                        No.
+                      </th>
+                      <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+                    </ng-container>
+
+                    <!-- fio Column -->
+                    <ng-container matColumnDef="fio">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear sortActionDescription="Sort by fio">
+                        Fio
+                      </th>
+                      <td mat-cell *matCellDef="let element"> {{element.fio}} </td>
+                    </ng-container>
+
+                    <!-- group Column -->
+                    <ng-container matColumnDef="group">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear sortActionDescription="Sort by group">
+                        Group
+                      </th>
+                      <td mat-cell *matCellDef="let element"> {{element.group}} </td>
+                    </ng-container>
+
+                    <!-- phoneNumber Column -->
+                    <ng-container matColumnDef="phoneNumber">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear sortActionDescription="Sort by phoneNumber">
+                        PhoneNumber
+                      </th>
+                      <td mat-cell *matCellDef="let element"> {{element.phoneNumber}} </td>
+                    </ng-container>
+
+                    <!-- remove student Column -->
+                    <ng-container matColumnDef="button">
+                      <th mat-header-cell *matHeaderCellDef>
+                      </th>
+                      <td mat-cell *matCellDef="let element">
+                          <button class="button523 redButton" (click)="removeStudent(element.id)">Delete</button>
+                          <button class="button523 greenButton" (click)="changeStudent(element)">Edit</button>
+                      </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                  </table>
+
+                  <div class="container111">
+                    <div id="con1">
+                      <a class="myButton" (click)="addNewStudent()">Добавить студента</a>
+                    </div>
+
+                    <div id="con2">
+                      <mat-paginator
+                        [pageSizeOptions]="[5, 10, 25]"
+                        [length]="totalElementsCount"
+                        [showFirstLastButtons]="firstLastButtons"
+                        (page)="onChangePage($event)">
+                      </mat-paginator>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

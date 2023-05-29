@@ -12,7 +12,6 @@ import { DialogChangeStudent, DialogDeleteStudent, DialogEditWrapperComponent } 
 import { HttpClientModule } from '@angular/common/http';
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
-import { TableSortingExample } from './components/sort-header/sort-header.component';
 import { AngularPaginatorModule } from 'angular-paginator';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -22,19 +21,22 @@ import { StudentTableComponent } from './components/users-table/student-table/st
 import { AdminTableComponent } from './components/users-table/admin-table/admin-table.component';
 import { TeacherTableComponent } from './components/users-table/teacher-table/teacher-table.component';
 import { JWT_OPTIONS, JwtHelperService } from '@auth0/angular-jwt';
+import { TableMainExample } from './components/table-base/table-base.component';
+import { PersonalTableComponent } from './components/users-table/personal-page/personal-page.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     DialogEditWrapperComponent,DialogDeleteStudent,DialogChangeStudent,
-    TableSortingExample,
+    TableMainExample,
     AuthorizationComponent,
     PageNotFoundComponent,
     HomePageComponent,
     StudentTableComponent,
     AdminTableComponent,
     TeacherTableComponent,
+    PersonalTableComponent,
   ],
   imports: [
     BrowserModule,

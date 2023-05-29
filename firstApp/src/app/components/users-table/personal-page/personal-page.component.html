@@ -1,0 +1,61 @@
+<div class="section2">
+  <div class="container" style="max-width: 50%;">
+    <div class="tabs">
+      <div class="tabs__content">
+        <div class="tabs__content__tab active">
+          <div class="row">
+            <div class="col-12">
+              <div class="container-login100-form-btn" style="padding: 5px 0px;justify-content: space-between;">
+                <button class="login100-form-btn" (click)="homeClick()">
+                  Вернуться назад
+                </button>
+                <button class="login100-form-btn" (click)="logOut()">
+                  Выйти
+                </button>
+              </div>
+
+
+              <div class="panel">
+                <div class="container">
+                  <h1>Редактирование личной информации</h1>
+                  <hr>
+
+                  <label for="email"><b>Фамилия Имя Отчество*</b></label>
+                  <input readonly type="text" placeholder="ТУТ ТИПА ФИО"
+                  [(ngModel)]="editingStudent.fio" required>
+
+                  <label for="email"><b>Группа*</b></label>
+                  <input readonly type="text" placeholder="ТУТ ТИПА ГРУППА"
+                  [(ngModel)]="editingStudent.group" required>
+
+                  <label for="email"><b>Куратор*</b></label>
+                  <input readonly type="text" placeholder="ТУТ ТИПА КУРАТОР"
+                  [(ngModel)]="editingStudent.curator" required>
+
+                  <label for="email"><b>Личный номер телефона</b></label>
+                  <input type="text" placeholder="ТУТ ТИПА НОМЕР ТЕЛЕФОНА ЧЕЛА"
+                  [(ngModel)]="editingStudent.phoneNumber" required>
+
+                  <label for="email"><b>Личный номер родителя</b></label>
+                  <input type="text" placeholder="ТУТ ТИПА НОМЕР ТЕЛЕФОНА РОДИТЕЛЯ"
+                  [(ngModel)]="editingStudent.phoneNumberOfParents" required>
+
+                  <!-- <label for="psw"><b>Password</b></label>
+                  <input type="text" placeholder="Enter Password" name="psw" required>
+
+                  <label for="psw-repeat"><b>Repeat Password</b></label>
+                  <input type="text" placeholder="Repeat Password" name="psw-repeat" required> -->
+                  <hr>
+
+                  <button type="submit" class="registerbtn" (click)="acceptChange()">Изменить</button>
+                </div>
+              </div>
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

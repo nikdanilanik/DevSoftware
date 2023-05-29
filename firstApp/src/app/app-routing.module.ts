@@ -7,13 +7,15 @@ import { AuthGuardService } from './service/auth-guard.service';
 import { StudentTableComponent } from './components/users-table/student-table/student-table.component';
 import { AdminTableComponent } from './components/users-table/admin-table/admin-table.component';
 import { TeacherTableComponent } from './components/users-table/teacher-table/teacher-table.component';
+import { PersonalTableComponent } from './components/users-table/personal-page/personal-page.component';
 
 const routes: Routes = [
   { path: 'home',             component: HomePageComponent },
   { path: 'login',            component: AuthorizationComponent },
-  { path: 'table-student',    component: StudentTableComponent, canActivate: [AuthGuardService] },
-  { path: 'table-admin',      component: AdminTableComponent, canActivate: [AuthGuardService] },
-  { path: 'table-teacher',    component: TeacherTableComponent, canActivate: [AuthGuardService] },
+  { path: 'table-student',    component: StudentTableComponent,   canActivate: [AuthGuardService] },
+  { path: 'table-admin',      component: AdminTableComponent,     canActivate: [AuthGuardService] },
+  { path: 'table-teacher',    component: TeacherTableComponent,   canActivate: [AuthGuardService] },
+  { path: 'personal-page',    component: PersonalTableComponent,  canActivate: [AuthGuardService] },
   { path: '',                 redirectTo: 'home', pathMatch: 'full' },
   { path: '**',               component: PageNotFoundComponent },
 

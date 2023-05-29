@@ -12,7 +12,7 @@ export class DialogEditWrapperComponent {
   editingStudent: Student;
 
   constructor(public dialogRef: MatDialogRef<DialogEditWrapperComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: Student)
+    @Inject(MAT_DIALOG_DATA) private data: Student)
     {
       this.editingStudent = new Student();
     }

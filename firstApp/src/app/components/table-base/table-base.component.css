@@ -48,7 +48,7 @@ a.myButton:hover{
   display:inline-block;
  }
 
- .container {
+.container {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;

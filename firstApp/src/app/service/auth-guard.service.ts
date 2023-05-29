@@ -23,8 +23,11 @@ export class AuthGuardService implements CanActivate {
   isAuthenticated(): boolean {
     if (localStorage.getItem(UsersUtil.CURRENT_USER) != null) { return true;}
     return false;
-    // const token = localStorage.getItem('curentUser');
-    // console.log(localStorage.getItem('curentUser'));
-    // return !this.jwtHelper.isTokenExpired(token);
+  }
+
+  isAuthenticatedAndNavigate(): void {
+    if (localStorage.getItem(UsersUtil.CURRENT_USER) != null) {
+      this.router.navigateByUrl(UrlPathUtil.navigateByUrlForRole());
+    }
   }
 }

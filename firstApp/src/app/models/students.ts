@@ -19,3 +19,21 @@ export class DeleteStudent {
 
   id: number | null;
 }
+
+export class AllDataOfStudent {
+  constructor() {
+    this.id = null;
+    this.fio = "";
+    this.group = "";
+    this.curator = "";
+    this.phoneNumber = "";
+    this.phoneNumberOfParents = "";
+  }
+
+  id: number | null;
+  fio: string;
+  group: string;
+  curator: string;
+  phoneNumber: string;
+  phoneNumberOfParents: string;
+}

@@ -1,3 +1,4 @@
+import { AuthGuardService } from './auth-guard.service';
 import { UrlPathUtil } from 'src/app/utils/url-path-util';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
@@ -5,7 +6,6 @@ import { catchError, map, Observable, throwError } from 'rxjs';
 import { User } from './../models/user';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { APP_BASE_HREF } from '@angular/common';
 import { UsersUtil } from '../utils/users-util';
 
 @Injectable({
@@ -14,12 +14,12 @@ import { UsersUtil } from '../utils/users-util';
 export class AuthServiceService {
 
   constructor(private http: HttpClient,
-    private cookieService: CookieService,
-    private router: Router) { }
+    private router: Router,
+    private authGuardService: AuthGuardService) { }
 
   auth(loginAndPass: String) {
     this.login(loginAndPass).subscribe(data => {
-      if (localStorage.getItem(UsersUtil.CURRENT_USER) != null) { this.router.navigateByUrl(UrlPathUtil.TABLE_STUDENT);}
+      this.authGuardService.isAuthenticatedAndNavigate();
     });
     // this.fakelogin().subscribe();
     //  .subscribe(
@@ -45,16 +45,23 @@ export class AuthServiceService {
     return this.http.post<any>('api/login', null, httpOptions).pipe(
       map(data => {
         let user: User = new User();
+
+        // ВСЁ ДЛЯ ЮЗЕРА
         // user.id = data.principal.id;
-        user.login = data.principal.username;
-        user.enabled = data.principal.enabled;
-        user.role = data.principal.authorities[0].authority;
+        // user.login = data.principal.username;
+        // user.enabled = data.principal.enabled;
+        // user.role = data.principal.authorities[0].authority;
         // for (let i = 0; i < data.principal.authorities.length; i++ )
         // {
         //   user.roles[i] = data.principal.authorities[i].authority;
         // }
 
-        localStorage.setItem(UsersUtil.CURRENT_USER, data);
+        localStorage.setItem(UsersUtil.LOGIN, data.principal.username);
+        localStorage.setItem(UsersUtil.ENABLED, data.principal.enabled);
+        localStorage.setItem(UsersUtil.ROLE, data.principal.authorities[0].authority);
+        localStorage.setItem(UsersUtil.ROLE_STUDENT_ID, data.details.student_id);
+
+        localStorage.setItem(UsersUtil.CURRENT_USER, JSON.stringify(data));
         return JSON.stringify(data);
       }),
       catchError((error: HttpErrorResponse) => {
@@ -73,6 +80,7 @@ export class AuthServiceService {
     return this.logout().subscribe(data => {
       if (data.principal.username != null && data.principal.username != "") {
         localStorage.removeItem(UsersUtil.CURRENT_USER);
+        this.router.navigateByUrl(UrlPathUtil.LOGIN);
       }
     });
   }

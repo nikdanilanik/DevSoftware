@@ -4,6 +4,7 @@ import { AuthServiceService } from './../../service/auth-service.service';
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { UsersUtil } from 'src/app/utils/users-util';
+import { AuthGuardService } from 'src/app/service/auth-guard.service';
 
 @Component({
   selector: 'app-authorization',
@@ -15,10 +16,10 @@ export class AuthorizationComponent {
   autoriz: Authen;
 
   constructor(private router: Router,
-    private authService: AuthServiceService) {
-
+    private authService: AuthServiceService,
+    private authGuardService: AuthGuardService) {
       this.autoriz = new Authen();
-      if (localStorage.getItem(UsersUtil.CURRENT_USER) != null) { this.router.navigateByUrl(UrlPathUtil.TABLE_STUDENT); }
+      this.authGuardService.isAuthenticatedAndNavigate();
   }
 
   homeClick() {
