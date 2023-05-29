@@ -1,10 +1,6 @@
 <div class="section2">
   <div class="container" style="max-width: 90%;">
-    <div class="tabs">
-      <div class="tabs__content">
-        <div class="tabs__content__tab active">
-          <div class="row">
-            <div class="col-12">
+
               <div class="container-login100-form-btn" style="padding: 5px 0px;justify-content: space-between;">
                 <button class="login100-form-btn" (click)="homeClick()">
                   Вернуться назад
@@ -18,7 +14,7 @@
               <div>
                 <div class="panel">
                   <div class="example-header">
-                      <input class="search-input" matInput (keyup)="applyFilter($any($event.target).value)" placeholder="Введите в поиск нужную информацию">
+                      <input class="search-input" matInput (keyup)="applyFilter($any($event.target).value)" placeholder="Введите в поиск нужную информацию" [(ngModel)]="filterData">
                   </div>
 
                   <table mat-table [dataSource]="dataSource" matSort (matSortChange)="announceSortChange($event)"
@@ -86,12 +82,5 @@
                   </div>
                 </div>
               </div>
-
-
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 </div>

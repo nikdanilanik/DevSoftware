@@ -1,12 +1,12 @@
 import { AuthGuardService } from './../../service/auth-guard.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DialogEditWrapperComponent, DialogDeleteStudent, DialogChangeStudent } from '../dialog-edit-wrapper/dialog-edit-wrapper.component';
 import { MatDialog } from '@angular/material/dialog';
 import { BaseServiceService } from '../../service/base-service.service';
 import { Student, DeleteStudent } from '../../models/students';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
-import { AfterViewInit, Component, EventEmitter, Input, Output, ViewChild} from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { AuthServiceService } from 'src/app/service/auth-service.service';
@@ -26,6 +26,11 @@ export class TableMainExample implements AfterViewInit {
   dataSource: MatTableDataSource<Student>;
   filterData:string;
 
+  thisPageIndexForRouting:number;
+  thisPageSizeForRouting:number;
+  sortCriterionForRouting:string;
+  filterDataForRouting:string;
+
   // @Input() students: Student[];
   // @Output() onChange = new EventEmitter();
 
@@ -35,6 +40,7 @@ export class TableMainExample implements AfterViewInit {
     protected router: Router,
     protected authService: AuthServiceService,
     protected authGuardService: AuthGuardService,
+    protected activatedRoute: ActivatedRoute,
     ) {
       // console.log("Конструктор sort-header");
       // console.log(this.students);
@@ -50,13 +56,39 @@ export class TableMainExample implements AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   ngAfterViewInit() {
-    this.authGuardService.isAuthenticatedAndNavigate();
-    this.baseServiceService.getAllStudents(0, 5, "id, asc").subscribe((studentsPage: Page<Student>) => {
-      this.dataSource = new MatTableDataSource<Student>(studentsPage.content);
-      this.totalElementsCount = studentsPage.totalElements;
-      this.sort.sort({ id: 'id', start: 'asc', disableClear: false });
-      this.dataSource.sort = this.sort;
-    });
+    if (!this.prossecingUrl()) {
+      this.authGuardService.isAuthenticatedAndNavigate();
+      this.baseServiceService.getAllStudents(0, 5, "id, asc").subscribe((studentsPage: Page<Student>) => {
+        this.dataSource = new MatTableDataSource<Student>(studentsPage.content);
+        this.totalElementsCount = studentsPage.totalElements;
+        this.sort.sort({ id: 'id', start: 'asc', disableClear: false });
+        this.dataSource.sort = this.sort;
+      });
+    }
+  }
+
+  prossecingUrl() :boolean {
+    const thisPageIndex = this.activatedRoute.snapshot.queryParams['thisPageIndex'];
+    const thisPageSize  = this.activatedRoute.snapshot.queryParams['thisPageSize'];
+    const sortCriterion = this.activatedRoute.snapshot.queryParams['sortCriterion'];
+    const filterData    = this.activatedRoute.snapshot.queryParams['filterData'];
+
+    console.log(thisPageIndex, thisPageSize, sortCriterion, filterData);
+
+    if (thisPageIndex !== 0 && thisPageSize != 5 && sortCriterion != "id, asc" || filterData) {
+      console.log("Чопчик");
+      this.baseServiceService.getAllStudents(thisPageIndex, thisPageSize, sortCriterion, filterData).subscribe((studentsPage: Page<Student>) => {
+        this.paginator.pageIndex = thisPageIndex;
+        this.paginator.pageSize = thisPageSize;
+        // this.sort..... Не уверен нежен ли
+        this.filterData = filterData;
+        this.dataSource = new MatTableDataSource<Student>(studentsPage.content);
+        this.totalElementsCount = studentsPage.totalElements;
+        this.dataSource.sort = this.sort;
+        return true;
+      });
+    }
+    return false;
   }
 
   getDataForPage(page: number, size: number, sort: string, filter?: string ) {
@@ -64,6 +96,7 @@ export class TableMainExample implements AfterViewInit {
       this.dataSource = new MatTableDataSource<Student>(studentsPage.content);
       this.totalElementsCount = studentsPage.totalElements;
     });
+    this.setUrl();
   }
 
   onChangePage(pe:PageEvent) {
@@ -93,6 +126,23 @@ export class TableMainExample implements AfterViewInit {
     this.getDataForPage(thisPageIndex, thisPageSize, sortCriterion, filterValue);
   }
 
+  setUrl() {
+    const currentUrl = this.router.url;
+    const queryParams = this.activatedRoute.snapshot.queryParamMap;
+    const newQueryParams = {
+      thisPageIndex: this.paginator.pageIndex,
+      thisPageSize: this.paginator.pageSize,
+      sortCriterion: `${this.sort.active},${this.sort.direction}`,
+      filterData: this.filterData,
+    };
+    const mergedParams = { ...queryParams, ...newQueryParams };
+    this.router.navigate([], {
+      relativeTo: this.activatedRoute,
+      queryParams: mergedParams,
+      queryParamsHandling: 'merge'
+    });
+  }
+
   addNewStudent(): void {
     const thisPageIndex = this.paginator.pageIndex;
     const thisPageSize = this.paginator.pageSize;
@@ -107,7 +157,7 @@ export class TableMainExample implements AfterViewInit {
           if(result.fio != "" && result.group != "" && result.phoneNumber != "" && result.fio != null) {
             console.log("adding new student: " + result.fio);
             this.baseServiceService.addNewStudent(result).subscribe(k=>
-              this.getDataForPage(thisPageIndex, thisPageSize, sortCriterion) );
+              this.getDataForPage(thisPageIndex, thisPageSize, sortCriterion, this.filterData) );
           }
         }
       });
@@ -126,7 +176,7 @@ export class TableMainExample implements AfterViewInit {
         if (result == undefined) { console.log("Cansel delete");}
         else if (idStudent != null) {
           this.baseServiceService.removeStudentById(idStudent).subscribe(k=>
-            this.getDataForPage(thisPageIndex, thisPageSize, sortCriterion) );
+            this.getDataForPage(thisPageIndex, thisPageSize, sortCriterion, this.filterData) );
         }
       });
   }
@@ -144,7 +194,7 @@ export class TableMainExample implements AfterViewInit {
         if(student.fio == result.fio && student.phoneNumber == result.phoneNumber && student.group == result.group) {console.log("Error change")}
         else {
           this.baseServiceService.changeStudent(result).subscribe(k=>
-            this.getDataForPage(thisPageIndex, thisPageSize, sortCriterion) );
+            this.getDataForPage(thisPageIndex, thisPageSize, sortCriterion, this.filterData) );
         }
       });
   }

@@ -56,7 +56,7 @@ export class BaseServiceService {
       })
     };
 
-    const url = `${this.studentsUrl}/${id}`
+    const url = `${this.studentsUrl}/delete/${id}`
     return this.http.delete(url, httpOptions)
     .pipe();
   }
