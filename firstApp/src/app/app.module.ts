@@ -23,6 +23,7 @@ import { TeacherTableComponent } from './components/users-table/teacher-table/te
 import { JWT_OPTIONS, JwtHelperService } from '@auth0/angular-jwt';
 import { TableMainExample } from './components/table-base/table-base.component';
 import { PersonalTableComponent } from './components/users-table/personal-page/personal-page.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 
 @NgModule({
@@ -53,6 +54,7 @@ import { PersonalTableComponent } from './components/users-table/personal-page/p
     AngularPaginatorModule,
     BrowserAnimationsModule,
     MatPaginatorModule,
+    MatSnackBarModule,
   ],
   providers: [
     { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },

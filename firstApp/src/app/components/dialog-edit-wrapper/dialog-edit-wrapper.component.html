@@ -7,7 +7,11 @@
   </mat-form-field>
   <mat-form-field class="full-width-input">
     <input matInput type="text" placeholder="Group of student"
-      [(ngModel)]="editingStudent.group" required>
+      [(ngModel)]="editingStudent.group.id" required>
+  </mat-form-field>
+  <mat-form-field class="full-width-input">
+    <input matInput type="text" placeholder="phoneNumberOfParents of student"
+      [(ngModel)]="editingStudent.phoneNumberOfParents" required>
   </mat-form-field>
   <mat-form-field class="full-width-input">
     <input matInput type="text" placeholder="PhoneNumber of student"

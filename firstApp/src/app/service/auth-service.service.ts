@@ -7,6 +7,7 @@ import { User } from './../models/user';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { UsersUtil } from '../utils/users-util';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,8 @@ export class AuthServiceService {
 
   constructor(private http: HttpClient,
     private router: Router,
-    private authGuardService: AuthGuardService) { }
+    private authGuardService: AuthGuardService,
+    private matSnackBar: MatSnackBar) { }
 
   auth(loginAndPass: String) {
     this.login(loginAndPass).subscribe(data => {
@@ -68,7 +70,8 @@ export class AuthServiceService {
         if(error.status === 401) {
           localStorage.removeItem(UsersUtil.CURRENT_USER);
           this.router.navigateByUrl(UrlPathUtil.LOGIN);
-          alert("Ошибка входа. Проверьте логин и пароль");
+          this.matSnackBar.open('Ошибка входа. Проверьте логин и пароль', 'Закрыть', {
+            duration: 5000, horizontalPosition: 'center', verticalPosition: 'bottom' });
         }
         return throwError(() => error);
       }),

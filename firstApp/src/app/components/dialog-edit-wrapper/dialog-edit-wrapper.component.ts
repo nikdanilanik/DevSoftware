@@ -1,4 +1,4 @@
-import { DeleteStudent } from './../../models/students';
+import { AllDataOfStudent, DeleteStudent } from './../../models/students';
 import { Student } from './../../models/students';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Component, Inject } from '@angular/core';
@@ -9,12 +9,13 @@ import { Component, Inject } from '@angular/core';
   styleUrls: ['./dialog-edit-wrapper.component.css']
 })
 export class DialogEditWrapperComponent {
-  editingStudent: Student;
+  editingStudent: AllDataOfStudent;
 
   constructor(public dialogRef: MatDialogRef<DialogEditWrapperComponent>,
     @Inject(MAT_DIALOG_DATA) private data: Student)
     {
-      this.editingStudent = new Student();
+      this.editingStudent = new AllDataOfStudent();
+      console.log(this.editingStudent);
     }
 
     ngOnInit(): void{
@@ -53,10 +54,10 @@ export class DialogDeleteStudent {
   styleUrls: ['./dialog-edit-wrapper.component.css']
 })
 export class DialogChangeStudent {
-  editingStudent: Student;
+  editingStudent: AllDataOfStudent;
 
   constructor(public dialogRef: MatDialogRef<DialogDeleteStudent>,
-    @Inject(MAT_DIALOG_DATA) public data: Student)
+    @Inject(MAT_DIALOG_DATA) public data: AllDataOfStudent)
     {
       this.editingStudent = Object.assign({}, this.data);
     }

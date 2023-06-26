@@ -7,6 +7,7 @@ export class UrlPathUtil {
   public static readonly TABLE_ADMIN = "table-admin";
   public static readonly TABLE_TEACHER = "table-teacher";
   public static readonly PERSONAL_PAGE = "personal-page";
+  public static readonly REGISTRATION = "registr-panel";
 
   public static navigateByUrlForRole() : string {
     if (localStorage.getItem(UsersUtil.ROLE) == UsersUtil.STUDENT)  { return UrlPathUtil.TABLE_STUDENT; }

@@ -5,6 +5,7 @@ import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { UsersUtil } from 'src/app/utils/users-util';
 import { AuthGuardService } from 'src/app/service/auth-guard.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-authorization',
@@ -17,7 +18,8 @@ export class AuthorizationComponent {
 
   constructor(private router: Router,
     private authService: AuthServiceService,
-    private authGuardService: AuthGuardService) {
+    private authGuardService: AuthGuardService,
+    private matSnackBar: MatSnackBar) {
       this.autoriz = new Authen();
       this.authGuardService.isAuthenticatedAndNavigate();
   }
@@ -27,7 +29,10 @@ export class AuthorizationComponent {
   }
 
   auth() {
-    if ( this.autoriz.login == "" || this.autoriz.password == "") { alert("Заполните поля")}
+    if ( this.autoriz.login == "" || this.autoriz.password == "") {
+      this.matSnackBar.open('заполните поля', 'Закрыть', {
+        duration: 5000, horizontalPosition: 'center', verticalPosition: 'bottom' });
+    }
     else { this.authService.auth(window.btoa(this.autoriz.login + ":" + this.autoriz.password));
     }
 

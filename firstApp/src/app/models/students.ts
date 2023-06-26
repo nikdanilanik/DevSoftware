@@ -1,14 +1,16 @@
+import { Group } from "./group";
+
 export class Student {
   constructor() {
     this.id = null;
     this.fio = "";
-    this.group = "";
+    this.group = new Group();
     this.phoneNumber = "";
   }
 
   id: number | null;
   fio: string;
-  group: string;
+  group: Group;
   phoneNumber: string;
 }
 
@@ -24,7 +26,7 @@ export class AllDataOfStudent {
   constructor() {
     this.id = null;
     this.fio = "";
-    this.group = "";
+    this.group = new Group();
     this.curator = "";
     this.phoneNumber = "";
     this.phoneNumberOfParents = "";
@@ -32,7 +34,7 @@ export class AllDataOfStudent {
 
   id: number | null;
   fio: string;
-  group: string;
+  group: Group;
   curator: string;
   phoneNumber: string;
   phoneNumberOfParents: string;

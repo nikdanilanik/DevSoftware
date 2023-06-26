@@ -1,3 +1,4 @@
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { BaseServiceService } from '../../../service/base-service.service';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
@@ -16,7 +17,8 @@ export class PersonalTableComponent {
 
   constructor(private router: Router,
     private authService: AuthServiceService,
-    private baseServiceService: BaseServiceService) {
+    private baseServiceService: BaseServiceService,
+    private matSnackBar: MatSnackBar) {
       baseServiceService.getOnlyOneStudent(2).subscribe(data => {
         this.editingStudent = data;
         return data;
@@ -33,8 +35,9 @@ export class PersonalTableComponent {
   }
 
   acceptChange() {
-    this.baseServiceService.changeStudent(this.editingStudent).subscribe(k=> {
-      alert("Данные были изменены");
+    this.baseServiceService.changeStudentForStudent(this.editingStudent).subscribe(k=> {
+      this.matSnackBar.open('Данные были изменены', 'Закрыть', {
+        duration: 5000, horizontalPosition: 'center', verticalPosition: 'bottom' });
       this.router.navigateByUrl(UrlPathUtil.navigateByUrlForRole());
     });
   }
